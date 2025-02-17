@@ -296,5 +296,37 @@ int main() {
     return 0;
 }
 
+Fluxograma:
+      Início
+         |
+  stdio_init_all()
+         |
+   adc_init(), adc_gpio_init(), adc_select_input()
+         |
+  pwm_init_buzzer(), configure_leds()
+         |
+     i2c_init(), ssd1306_init()
+         |
+  gpio_init(BUTTON_A_PIN), gpio_set_dir, gpio_pull_up
+         |
+  gpio_init(BUTTON_B_PIN), gpio_set_dir, gpio_pull_up
+         |
+ssd1306_draw_string() -> "Alerta de Segurança", "Aguardando ativação..."
+         |
+       Loop
+        /  \
+(Botão A pressionado?) (Botão B pressionado?)
+        /                   \
+(system_active = true) (system_active = false)
+  update_led_status()   update_led_status()
+ssd1306_draw_string()  ssd1306_draw_string()
+         |
+ (system_active?)
+        /  \
+       /    \_______
+      /             \
+(Microfone detecta som?)   update_led_status()
+      /     \
+(play_security_alarm()) (update_led_status())
 
 
